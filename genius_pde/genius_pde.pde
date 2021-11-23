@@ -20,10 +20,10 @@ int holdTime = 1500;
 int timeStep = 0;
 int mousePlace = -1;
 
+boolean hold    = false;
 boolean error   = false;
 boolean showing = false;
 boolean breath  = false;
-boolean hold = false;
 
 void setup() {
   size(500, 500);
@@ -50,44 +50,53 @@ void draw() {
     rect(40 + 63 * i, 65 + 15 * i, 50, 375 - 30 * i, 10);
 
     if (!showing && !error && i == mousePlace){
-      fill(color(255, 255, 255, 200));
+      fill(color(255, 255, 255, 100));
       rect(40 + 63 * i, 65 + 15 * i, 50, 375 - 30 * i, 10);
     }
   }
   
-  if(hold && millis() - timeStep > holdTime) {
-    hold = false;
-  } else if (!hold) {
-    if (error && millis() - timeStep > blinkingTime)
-      error = false;
-  
-    if (showing && !breath) {
-      fill(color(255, 255, 255, 200));
-      rect(40 + 63 * sequence[sequenceId], 65 + 15 * sequence[sequenceId], 50, 375 - 30 * sequence[sequenceId], 10);
-  
-      if (millis() - timeStep > blinkingTime) {
-        timeStep = millis();
-        breath = true;
-      }
-    }
-    else if (showing && millis() - timeStep > waitingTime) {
+  if (hold) {
+    if (millis() - timeStep > holdTime)
+      hold = false;
+  }
+  else if (error && millis() - timeStep > blinkingTime)
+    error = false;
+  else if (showing && !breath) {
+    fill(color(255, 255, 255, 200));
+    rect(40 + 63 * sequence[sequenceId], 65 + 15 * sequence[sequenceId], 50, 375 - 30 * sequence[sequenceId], 10);
+
+    if (millis() - timeStep > blinkingTime) {
       timeStep = millis();
-      breath = false;
-      
-      if (++sequenceId >= sequence.length) {
-        showing = false;
-        sequenceId = 0;
-      }
-      else
-        SF[sequence[sequenceId]].play();
+      breath = true;
     }
   }
+  else if (showing && millis() - timeStep > waitingTime) {
+    timeStep = millis();
+    breath = false;
+    
+    if (++sequenceId >= sequence.length) {
+      showing = false;
+      sequenceId = 0;
+    }
+    else
+      SF[sequence[sequenceId]].play();
+  }
+  else if (!showing) {
+  }
+  
+  print(mouseX + " " + mouseY + "\n");
+  strokeWeight(1);
+  fill(128, 128, 128);
+  for (int i = 0; i < difficult; ++i) {
+    circle(65 + 63 * i, 103 + 17 * i, 8);
+    circle(65 + 63 * i, 403 - 17 * i, 8);
+  }
+  strokeWeight(3);
 }
 
 void mouseClicked(){
 
   if (mousePlace == -1) {
-    showing = false;
     sequenceId = -1;
     sequence = new int[] {parseInt(random(0, difficult))};
     showing = true;
