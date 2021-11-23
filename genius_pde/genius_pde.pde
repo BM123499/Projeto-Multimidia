@@ -20,7 +20,7 @@ int mX, mY;
 int errorTime    = 2000;
 int waitingTime  =  200;
 int blinkingTime =  800;
-int posfxTime    =  500;
+int posclickTime    =  500;
 int holdTime     = 1500;
 
 int timeStep     = 0;
@@ -30,7 +30,9 @@ int selectedTile = 0;
 boolean error   = false;
 boolean showing = false;
 boolean breath  = false;
-boolean posfx   = false;
+boolean posclick   = false;
+
+boolean hold = false;
 
 void setup() {
   size(500, 500);
@@ -60,23 +62,28 @@ void draw() {
     fill(error ? color(255, 0, 0) : Colors[i]);
     rect(40 + 63 * i, 65 + 15 * i, 50, 375 - 30 * i, 10);
 
-    if (!showing && !error && !posfx && i == mousePlace){
+    if (!showing && !error && !posclick && i == mousePlace){
       fill(color(255, 255, 255, 100));
       rect(40 + 63 * i, 65 + 15 * i, 50, 375 - 30 * i, 10);
     }
   }
   
   int passedTime = millis() - timeStep;
+  
+   if (hold) {
+    if (millis() - timeStep > holdTime)
+      hold = false;
+   }
 
-  if (posfx) {
-    fill(color(255, 255, 255, 150 + min((100 * passedTime)/posfxTime, 100 - (100 * passedTime)/posfxTime) ));
+  else if (posclick) {
+    fill(color(255, 255, 255, 150 + min((100 * passedTime)/posclickTime, 100 - (100 * passedTime)/posclickTime) ));
     rect(40 + 63 * selectedTile, 65 + 15 * selectedTile, 50, 375 - 30 * selectedTile, 10);
     
     image(note_img, mX + passedTime/15, mY - pow(passedTime, 1.9)/1500, 32, 64 ); 
     
-    if (passedTime > posfxTime) {
+    if (passedTime > posclickTime) {
       timeStep = millis();
-      posfx = false;
+      posclick = false;
     }
   }
   else if (error) {
@@ -128,11 +135,12 @@ void mouseClicked(){
     if (sequence.length == 0 || sequence[sequenceId] != mousePlace) {
       errorSound.play();
       error = true;
+      sequence = new int[]{};
     }
     else {
       SF[sequence[sequenceId]].play();
       selectedTile = mousePlace;
-      posfx = true;
+      posclick = true;
       mX = mouseX;
       mY = mouseY;
 
@@ -140,6 +148,7 @@ void mouseClicked(){
         sequenceId = -1;
         showing = true;
         breath = true;
+        hold = true;
         sequence = append(sequence, parseInt(random(0, difficult)));
       }
     }
