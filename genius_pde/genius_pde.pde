@@ -1,7 +1,7 @@
 import processing.sound.*;
 
 // prefab
-color[] sectionColors = {color(234, 28, 36), color(247, 147, 32), color(245, 229, 12), color(1, 166, 84), color(92, 201, 231), color(18, 74, 149), color(134, 61, 152)};
+color[] Colors = {color(234, 28, 36), color(247, 147, 32), color(245, 229, 12), color(1, 166, 84), color(92, 201, 231), color(18, 74, 149), color(134, 61, 152)};
 int sequenceId = 0;
 int difficult = 7;
 int[] sequence = {};
@@ -27,29 +27,26 @@ boolean hold = false;
 
 void setup() {
   size(500, 500);
-  strokeWeight(3);
   
+  PImage img = loadImage("Test.PNG");
+  cursor(img, 0, 0);
+
+  strokeWeight(3);
   SF = new SoundFile[] {new SoundFile(this, "../Sound/1.wav"), new SoundFile(this, "../Sound/2.wav"), new SoundFile(this, "../Sound/3.wav"), new SoundFile(this, "../Sound/4.wav"),
                         new SoundFile(this, "../Sound/5.wav"), new SoundFile(this, "../Sound/6.wav"), new SoundFile(this, "../Sound/7.wav")};
 }
 
 void draw() {
+
   fill(165, 109, 39);
-  pushMatrix();
-  float angle1 = radians(15);
-  rotate(angle1);
-  rect(40, 70, 478.58, 33, 10);
-  popMatrix();
+  rotate(radians(15));
+  rect(40, 70, 478, 33, 10);  
+  rotate(radians(-30));
+  rect(-90, 390, 478, 33, 10);
+  rotate(radians(15));
   
-  pushMatrix();
-  float angle2 = radians(-15);
-  rotate(angle2);
-  rect(-90, 390, 478.58, 33, 10);
-  popMatrix();
-  
-  float sectionDegree = 2 * PI / difficult;
   for (int i = 0; i < difficult; ++i) {
-    fill(error ? color(255, 0, 0) : sectionColors[i]);
+    fill(error ? color(255, 0, 0) : Colors[i]);
     rect(40 + 63 * i, 65 + 15 * i, 50, 375 - 30 * i, 10);
 
     if (!showing && !error && i == mousePlace){
@@ -66,7 +63,7 @@ void draw() {
   
     if (showing && !breath) {
       fill(color(255, 255, 255, 200));
-      arc(250, 250, 320, 320, sequence[sequenceId] * sectionDegree, (sequence[sequenceId] + 1) * sectionDegree, PIE);
+      rect(40 + 63 * sequence[sequenceId], 65 + 15 * sequence[sequenceId], 50, 375 - 30 * sequence[sequenceId], 10);
   
       if (millis() - timeStep > blinkingTime) {
         timeStep = millis();
@@ -124,7 +121,6 @@ void mouseMoved() {
       mousePlace = i;
       return;
     }
-  
    
   mousePlace = -1;
 }
