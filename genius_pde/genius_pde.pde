@@ -78,24 +78,26 @@ void mouseClicked(){
 
   if (mousePlace == 100) {
     showing = false;
-    sequenceId = 0;
+    sequenceId = -1;
     sequence = new int[] {parseInt(random(0, difficult))};
-    SF[sequence[0]].play();
     showing = true;
+    breath = true;
     timeStep = millis();
-    breath = false;
   }
   else if (!showing && 0 <= mousePlace && mousePlace < difficult) {
     if (sequence.length == 0 || sequence[sequenceId] != mousePlace)
       error = true;
-    else if (++sequenceId >= sequence.length) {
-      sequenceId = 0;
-      showing = true;
-      SF[sequence[0]].play();
-      sequence = append(sequence, parseInt(random(0, difficult)));
-    }
-    else
+    else {
       SF[sequence[sequenceId]].play();
+
+      if (++sequenceId >= sequence.length) {
+        sequenceId = -1;
+        showing = true;
+        breath = true;
+        sequence = append(sequence, parseInt(random(0, difficult)));
+      }
+    }
+
     timeStep = millis();
   }
 }
