@@ -8,6 +8,7 @@ int[] sequence = {};
 
 // Sound
 SoundFile[] SF;
+SoundFile errorSound;
 
 // design
 int innerCircle = 75;
@@ -16,6 +17,7 @@ PImage note_img;
 int mX, mY;
 
 // automatic
+int errorTime    = 2000;
 int waitingTime  =  200;
 int blinkingTime =  800;
 int posfxTime    =  500;
@@ -32,13 +34,14 @@ boolean posfx   = false;
 
 void setup() {
   size(500, 500);
+  strokeWeight(3);
   
   PImage img = loadImage("Test.PNG");
   cursor(img, 0, 0);
-  
+
   note_img = loadImage("note.png");
 
-  strokeWeight(3);
+  errorSound = new SoundFile(this, "../Sound/error.mp3");
   SF = new SoundFile[] {new SoundFile(this, "../Sound/1.wav"), new SoundFile(this, "../Sound/2.wav"), new SoundFile(this, "../Sound/3.wav"), new SoundFile(this, "../Sound/4.wav"),
                         new SoundFile(this, "../Sound/5.wav"), new SoundFile(this, "../Sound/6.wav"), new SoundFile(this, "../Sound/7.wav")};
 }
@@ -76,8 +79,10 @@ void draw() {
       posfx = false;
     }
   }
-  else if (error && millis() - timeStep > blinkingTime)
-    error = false;
+  else if (error) {
+    if (millis() - timeStep > errorTime)
+      error = false;
+  }
   else if (showing && !breath) {
     fill(color(255, 255, 255, 150 + min((100 * passedTime)/blinkingTime, 100 - (100 * passedTime)/blinkingTime) ));
     rect(40 + 63 * sequence[sequenceId], 65 + 15 * sequence[sequenceId], 50, 375 - 30 * sequence[sequenceId], 10);
@@ -120,8 +125,10 @@ void mouseClicked(){
     timeStep = millis();
   }
   else if (!showing && 0 <= mousePlace && mousePlace < difficult) {
-    if (sequence.length == 0 || sequence[sequenceId] != mousePlace)
+    if (sequence.length == 0 || sequence[sequenceId] != mousePlace) {
+      errorSound.play();
       error = true;
+    }
     else {
       SF[sequence[sequenceId]].play();
       selectedTile = mousePlace;
