@@ -15,6 +15,7 @@ int innerCircle = 75;
 // automatic
 int waitingTime  = 200;
 int blinkingTime = 800;
+int holdTime = 1500;
 
 int timeStep = 0;
 int mousePlace = -1;
@@ -22,6 +23,7 @@ int mousePlace = -1;
 boolean error   = false;
 boolean showing = false;
 boolean breath  = false;
+boolean hold = false;
 
 void setup() {
   size(500, 500);
@@ -46,28 +48,32 @@ void draw() {
     }
   }
   
-  if (error && millis() - timeStep > blinkingTime)
-    error = false;
-
-  if (showing && !breath) {
-    fill(color(255, 255, 255, 200));
-    arc(250, 250, 320, 320, sequence[sequenceId] * sectionDegree, (sequence[sequenceId] + 1) * sectionDegree, PIE);
-
-    if (millis() - timeStep > blinkingTime) {
+  if(hold && millis() - timeStep > holdTime) {
+    hold = false;
+  } else if (!hold) {
+    if (error && millis() - timeStep > blinkingTime)
+      error = false;
+  
+    if (showing && !breath) {
+      fill(color(255, 255, 255, 200));
+      arc(250, 250, 320, 320, sequence[sequenceId] * sectionDegree, (sequence[sequenceId] + 1) * sectionDegree, PIE);
+  
+      if (millis() - timeStep > blinkingTime) {
+        timeStep = millis();
+        breath = true;
+      }
+    }
+    else if (showing && millis() - timeStep > waitingTime) {
       timeStep = millis();
-      breath = true;
+      breath = false;
+      
+      if (++sequenceId >= sequence.length) {
+        showing = false;
+        sequenceId = 0;
+      }
+      else
+        SF[sequence[sequenceId]].play();
     }
-  }
-  else if (showing && millis() - timeStep > waitingTime) {
-    timeStep = millis();
-    breath = false;
-    
-    if (++sequenceId >= sequence.length) {
-      showing = false;
-      sequenceId = 0;
-    }
-    else
-      SF[sequence[sequenceId]].play();
   }
 
   fill(color(0, 0, 0));
@@ -94,6 +100,7 @@ void mouseClicked(){
         sequenceId = -1;
         showing = true;
         breath = true;
+        hold = true;
         sequence = append(sequence, parseInt(random(0, difficult)));
       }
     }
