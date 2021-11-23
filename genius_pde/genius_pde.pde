@@ -1,10 +1,10 @@
 import processing.sound.*;
 
 // prefab
-color[] sectionColors = {color(255, 0, 0), color(0, 255, 0), color(0, 0, 255), color(255, 255, 0), color(255, 0, 255), color(0, 255, 255)};
-int[] sequence = {};
+color[] sectionColors = {color(234, 28, 36), color(247, 147, 32), color(245, 229, 12), color(1, 166, 84), color(92, 201, 231), color(18, 74, 149), color(134, 61, 152)};
 int sequenceId = 0;
-int difficult = 4;
+int difficult = 7;
+int[] sequence = {};
 
 // Sound
 SoundFile[] SF;
@@ -27,24 +27,34 @@ boolean hold = false;
 
 void setup() {
   size(500, 500);
-  strokeWeight(6);
+  strokeWeight(3);
   
   SF = new SoundFile[] {new SoundFile(this, "../Sound/1.wav"), new SoundFile(this, "../Sound/2.wav"), new SoundFile(this, "../Sound/3.wav"), new SoundFile(this, "../Sound/4.wav"),
                         new SoundFile(this, "../Sound/5.wav"), new SoundFile(this, "../Sound/6.wav"), new SoundFile(this, "../Sound/7.wav")};
 }
 
 void draw() {
-  fill(color(0, 0, 0));
-  arc(250, 250, 400, 400, 0, 2 * PI, PIE);
-
+  fill(165, 109, 39);
+  pushMatrix();
+  float angle1 = radians(15);
+  rotate(angle1);
+  rect(40, 70, 478.58, 33, 10);
+  popMatrix();
+  
+  pushMatrix();
+  float angle2 = radians(-15);
+  rotate(angle2);
+  rect(-90, 390, 478.58, 33, 10);
+  popMatrix();
+  
   float sectionDegree = 2 * PI / difficult;
   for (int i = 0; i < difficult; ++i) {
     fill(error ? color(255, 0, 0) : sectionColors[i]);
-    arc(250, 250, 320, 320, i * sectionDegree, (i + 1) * sectionDegree, PIE);
+    rect(40 + 63 * i, 65 + 15 * i, 50, 375 - 30 * i, 10);
 
     if (!showing && !error && i == mousePlace){
       fill(color(255, 255, 255, 200));
-      arc(250, 250, 320, 320, i * sectionDegree, (i + 1) * sectionDegree, PIE);
+      rect(40 + 63 * i, 65 + 15 * i, 50, 375 - 30 * i, 10);
     }
   }
   
@@ -75,14 +85,11 @@ void draw() {
         SF[sequence[sequenceId]].play();
     }
   }
-
-  fill(color(0, 0, 0));
-  arc(250, 250, 2 * innerCircle, 2 * innerCircle, 0, 2 * PI, PIE);
 }
 
 void mouseClicked(){
 
-  if (mousePlace == 100) {
+  if (mousePlace == -1) {
     showing = false;
     sequenceId = -1;
     sequence = new int[] {parseInt(random(0, difficult))};
@@ -110,18 +117,14 @@ void mouseClicked(){
 }
 
 void mouseMoved() {
-  PVector vec = new PVector(mouseX - 250, mouseY - 250);
+  PVector vec = new PVector(mouseX, mouseY);
   
-  if (vec.dot(vec) < innerCircle * innerCircle)
-    mousePlace = 100;
-  else if (vec.dot(vec) < 160 * 160){
-    float angle = PVector.angleBetween(vec.normalize(), new PVector(1, 0));
-    
-    if (vec.y < 0)
-      angle = TWO_PI - angle;
-     
-    mousePlace = parseInt(angle * difficult / TWO_PI);
-  }
-  else 
-    mousePlace = -1;
+  for (int i = 0; i < difficult; i++)
+    if (40 + 63 * i < vec.x && vec.x < 90 + 63 * i && 65 + 15 * i < vec.y && vec.y < 440 - 15 * i) {
+      mousePlace = i;
+      return;
+    }
+  
+   
+  mousePlace = -1;
 }
