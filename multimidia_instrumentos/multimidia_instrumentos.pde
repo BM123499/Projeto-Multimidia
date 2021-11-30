@@ -14,7 +14,7 @@ void setup() {
   violaoButton = loadImage("violao.png");
   trianguloButton = loadImage("triangulo.png");
   
-  somTambor = new SoundFile(this, "somTambor.mp3");
+  somTambor = new SoundFile(this, "./data/somTambor.wav");
 }
 
 void draw() {
