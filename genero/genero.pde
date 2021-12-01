@@ -6,7 +6,7 @@ PImage img;
 SoundFile[] musicas;
 String[] generos;
 
-String[] todasOpcoes = {"Funk", "Rock", "POP", "KPOP", "Opcao1", "Opcao2", "Opcao3", "Opcao4"};
+String[] todasOpcoes = {"Funk", "Rock", "POP", "KPOP", "Folk", "Forró", "MPB", "Rap"};
 String[] opcoes = new String[] {"Opcao1", "Opcao2", "Opcao3", "Opcao4"};
 
 int idMusica = -1;
