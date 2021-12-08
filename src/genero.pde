@@ -1,7 +1,7 @@
 import processing.sound.*;
 Waveform waveform;
 
-PImage img;
+PImage gen_img;
 
 SoundFile[] musicas;
 String[] generos;
@@ -12,19 +12,18 @@ String[] opcoes = new String[] {"Opcao1", "Opcao2", "Opcao3", "Opcao4"};
 int idMusica = -1;
 int resposta = -1; 
 
-void setup() {
-  size(750, 750);
-  img = loadImage("Genero.png");
+void genero_setup() {
+  gen_img = loadImage("../Images/Genero.png");
 
-  musicas = new SoundFile[] {new SoundFile(this, "sample.aiff")};
+  musicas = new SoundFile[] {new SoundFile(this, "../Sounds/sample.aiff")};
   generos = new String[] {"POP"};
-  
-  fill(255);
-  textAlign(CENTER, CENTER);
 }
 
-void draw() {
-  image(img, 0, 0, width, height);
+void genero_draw() {
+  fill(255);
+  textAlign(CENTER, CENTER);
+
+  image(gen_img, 0, 0, width, height);
   
   fill(255);
   noStroke();
@@ -61,9 +60,11 @@ void draw() {
   text(opcoes[2], 200, 630);
   text(opcoes[3], 550, 630);
   rectMode(CORNER);
+  
+  textAlign(LEFT, BASELINE);
 }
 
-void mouseClicked() {
+void genero_mouseClicked() {
   int selecionado = -1;
   
   if (50 < mouseX && mouseX < 700 && 150 < mouseY && mouseY < 400)
@@ -112,14 +113,19 @@ void mouseClicked() {
     musicas[idMusica].play();
   }
   else if (resposta != -1) {
-    if (resposta == selecionado) {
+    if (resposta == selecionado)
       println("acertou");
-    }
-    else {
+    else
       println("errou");
-    }
-    
+
     musicas[idMusica].stop();
   }
-  
+}
+
+void genero_exit() {
+  if (idMusica >= 0 && musicas[idMusica].isPlaying())
+    musicas[idMusica].stop();
+
+  idMusica = -1;
+  resposta = -1; 
 }

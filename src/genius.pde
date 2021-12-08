@@ -11,7 +11,6 @@ SoundFile[] SF;
 SoundFile errorSound;
 
 // design
-int innerCircle = 75;
 PImage note_img;
 
 int mX, mY;
@@ -20,7 +19,7 @@ int mX, mY;
 int errorTime    = 2000;
 int waitingTime  =  200;
 int blinkingTime =  800;
-int posclickTime    =  500;
+int posclickTime =  500;
 int holdTime     = 1500;
 
 int timeStep     = 0;
@@ -33,23 +32,22 @@ boolean breath  = false;
 boolean posclick   = false;
 
 boolean hold = false;
+PImage cursor;
 
-void setup() {
-  size(500, 500);
-  strokeWeight(3);
-  
-  PImage img = loadImage("Test.PNG");
-  cursor(img, 0, 0);
+void genius_setup() {
+  cursor = loadImage("../Images/Test.PNG");
 
-  note_img = loadImage("note.png");
+  note_img = loadImage("../Images/note.png");
 
-  errorSound = new SoundFile(this, "../Sound/error.mp3");
-  SF = new SoundFile[] {new SoundFile(this, "../Sound/1.wav"), new SoundFile(this, "../Sound/2.wav"), new SoundFile(this, "../Sound/3.wav"), new SoundFile(this, "../Sound/4.wav"),
-                        new SoundFile(this, "../Sound/5.wav"), new SoundFile(this, "../Sound/6.wav"), new SoundFile(this, "../Sound/7.wav")};
+  errorSound = new SoundFile(this, "../Sounds/error.mp3");
+  SF = new SoundFile[] {new SoundFile(this, "../Sounds/1.wav"), new SoundFile(this, "../Sounds/2.wav"), new SoundFile(this, "../Sounds/3.wav"), new SoundFile(this, "../Sounds/4.wav"),
+                        new SoundFile(this, "../Sounds/5.wav"), new SoundFile(this, "../Sounds/6.wav"), new SoundFile(this, "../Sounds/7.wav")};
 }
 
-void draw() {
+void genius_draw() {
   background(200);
+  strokeWeight(3);
+  cursor(cursor, 0, 0);
 
   fill(165, 109, 39);
   rotate(radians(15));
@@ -119,10 +117,12 @@ void draw() {
     circle(65 + 63 * i, 103 + 17 * i, 8);
     circle(65 + 63 * i, 403 - 17 * i, 8);
   }
-  strokeWeight(3);
+
+  strokeWeight(1);
+  cursor(ARROW);
 }
 
-void mouseClicked(){
+void genius_mouseClicked(){
 
   if (mousePlace == -1) {
     sequence = new int[] {parseInt(random(0, difficult))};
@@ -157,7 +157,7 @@ void mouseClicked(){
   }
 }
 
-void mouseMoved() {
+void genius_mouseMoved() {
   PVector vec = new PVector(mouseX, mouseY);
   
   for (int i = 0; i < difficult; i++)
@@ -167,4 +167,16 @@ void mouseMoved() {
     }
    
   mousePlace = -1;
+}
+
+void genius_exit() {
+  if (errorSound.isPlaying())
+    errorSound.stop();
+    
+  for (int i = 0; i < SF.length; ++i)
+    if (SF[i].isPlaying())
+      SF[i].stop();
+      
+  sequenceId = 0;
+  sequence = new int[] {};
 }

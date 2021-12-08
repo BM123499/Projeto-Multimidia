@@ -1,21 +1,20 @@
-PImage bg;
+PImage tela_bg;
 
 int rectX, rectY;
 int rectSize = 140;
 int gapRectY = 85;
 boolean genButtonOver = false, seqButtonOver = false, notasButtonOver = false, insButtonOver = false;
 
-void setup() {
-  size(750, 750);
+void tela_setup() {
   // A imagem precisa ter o mesmo tamanho da tela
-  bg = loadImage("Tela_Inicial.png");
+  tela_bg = loadImage("../Images/Tela_Inicial.png");
   
   rectX = width/2-rectSize-10;
   rectY = height/2-rectSize/5;
 }
 
-void draw() {
-  background(bg);
+void tela_draw() {
+  background(tela_bg);
   
   if(genButtonOver){
     fill(#b25726);
@@ -60,7 +59,7 @@ void draw() {
   
 }
 
-void mouseMoved(){
+void tela_mouseMoved(){
   if ( overRect(rectX, rectY, rectSize + 180, rectSize - 90) ) {
     genButtonOver = true; 
     seqButtonOver = notasButtonOver = insButtonOver = false;
@@ -87,14 +86,14 @@ boolean overRect(int x, int y, int width, int height)  {
   }
 }
 
-void mousePressed(){
+void tela_mousePressed(){
   if(genButtonOver){
-    print("gêneros");
+    screen = 3;
   } else if(seqButtonOver){
-    print("sequências");
+    screen = 4;
   } else if(notasButtonOver){
-    print("notas");
+    screen = 1;
   } else if(insButtonOver){
-    print("instrumentos");
+    screen = 2;
   }
 }

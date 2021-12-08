@@ -21,12 +21,10 @@ color[] CORES_BOTOES = {#00B8A9, #FF00AE, #FF7D37, #FFD659};
 int[] X_INICIAL_BOTOES = {37, 214, 214 + 177, 214 + 177*2, 125, 125 + 177, 125 + 177 * 2 };
 int[] Y_INICIAL_BOTOES = {482, 482, 482, 482, 575, 575, 575 };
 
-void setup() {
-  size(750, 750);
-
-  ERROR_SOUND = new SoundFile(this, "../Sound/error.mp3");
-  NOTES_SOUNDS = new SoundFile[] {new SoundFile(this, "../Sound/1.wav"), new SoundFile(this, "../Sound/2.wav"), new SoundFile(this, "../Sound/3.wav"), new SoundFile(this, "../Sound/4.wav"),
-                        new SoundFile(this, "../Sound/5.wav"), new SoundFile(this, "../Sound/6.wav"), new SoundFile(this, "../Sound/7.wav")};
+void nota_setup() {
+  ERROR_SOUND = new SoundFile(this, "../Sounds/error.mp3");
+  NOTES_SOUNDS = new SoundFile[] {new SoundFile(this, "../Sounds/1.wav"), new SoundFile(this, "../Sounds/2.wav"), new SoundFile(this, "../Sounds/3.wav"), new SoundFile(this, "../Sounds/4.wav"),
+                                  new SoundFile(this, "../Sounds/5.wav"), new SoundFile(this, "../Sounds/6.wav"), new SoundFile(this, "../Sounds/7.wav")};
 }
 void initialize() {
   int chosenIndex = int(random(NOTES.length - 1));
@@ -51,14 +49,14 @@ void cleanUp() {
 }
 
 void drawBackground() { 
-  image(loadImage("./data/Notas.png"), 0 , 0);
-  image(loadImage("./data/pauta.png"), 0 , 150);
+  image(loadImage("../Images/Notas.png"), 0 , 0);
+  image(loadImage("../Images/pauta.png"), 0 , 150);
 }
 
 void drawWaitingForAnswer() {  
   // Desenhar a nota na pauta
   int[] POSICOES_NOTAS = {243, 260, 348, 330, 312, 295, 277};
-  PImage whole = loadImage("./data/whole.png");
+  PImage whole = loadImage("../Images/whole.png");
   whole.resize(0, 30);
   image(whole, 300, POSICOES_NOTAS[CHOSEN_NOTE_INDEX]);
   
@@ -72,7 +70,7 @@ void drawWaitingForAnswer() {
   }
 }
 
-void mouseClicked() {
+void nota_mouseClicked() {
   if(isTerminalState()) {
     cleanUp();
   }
@@ -106,7 +104,7 @@ boolean isTerminalState() {
   return CURRENT_STATE == STATE_CORRECT || CURRENT_STATE == STATE_ERROR;
 }
 
-void draw() {
+void nota_draw() {
   drawBackground();
   
   if (CURRENT_STATE == STATE_INITIAL) {
@@ -118,4 +116,13 @@ void draw() {
   } else if (CURRENT_STATE == STATE_ERROR) {
     drawError();
   }
+}
+
+void nota_exit() {
+  for (int i = 0; i < NOTES_SOUNDS.length; ++i)
+    if (NOTES_SOUNDS[i].isPlaying())
+      NOTES_SOUNDS[i].stop();
+  
+  if (ERROR_SOUND.isPlaying())
+    ERROR_SOUND.stop();
 }
