@@ -59,12 +59,16 @@ void instrumentos_mouseClicked(){
 
   //clique para ouvir
   if(   mouseX > 230.5 && mouseX < (230.5 + 282)
-     && mouseY > 420   && mouseY < (420   + 35))
+     && mouseY > 420   && mouseY < (420   + 35)) {
         somDaVez.play();
+        activateNote = true;
+  }
 
   //tambor
   if(   mouseX > tbX && mouseX < (tbX + tamborButton.width)
      && mouseY >  bY && mouseY < ( bY + tamborButton.height)){
+
+    activateNote = true;
     if (numeroDoInstrumento == 1) {
       somVitoria.play();
       numeroDoInstrumento = ceil(random(1, 4));
@@ -76,17 +80,21 @@ void instrumentos_mouseClicked(){
   //corneta
   if(   mouseX > cbX && mouseX < (cbX + cornetaButton.width)
      && mouseY >  bY && mouseY < ( bY + cornetaButton.height)){
+
+    activateNote = true;
     if (numeroDoInstrumento == 2) {
       somVitoria.play();
       numeroDoInstrumento = ceil(random(1, 4));
     }
     else
       somDerrota.play();
-  };
+  }
 
   //violao
   if(   mouseX > vbX && mouseX < (vbX + violaoButton.width)
      && mouseY >  bY && mouseY < ( bY + violaoButton.height)){
+
+    activateNote = true;
     if (numeroDoInstrumento == 3) {
       somVitoria.play();
       numeroDoInstrumento = ceil(random(1, 4));
@@ -98,6 +106,8 @@ void instrumentos_mouseClicked(){
   //triangulo
   if(   mouseX > trbX && mouseX < (trbX + trianguloButton.width)
      && mouseY >   bY && mouseY < (  bY + trianguloButton.height)) {
+
+    activateNote = true;
     if (numeroDoInstrumento == 4) {
       somVitoria.play();
       numeroDoInstrumento = ceil(random(1, 4));

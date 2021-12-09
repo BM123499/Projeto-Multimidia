@@ -86,7 +86,7 @@ boolean overRect(int x, int y, int width, int height)  {
   }
 }
 
-void tela_mousePressed(){
+void tela_mouseClicked(){
   if(genButtonOver){
     screen = 3;
   } else if(seqButtonOver){

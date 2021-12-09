@@ -85,6 +85,7 @@ void genero_mouseClicked() {
   if (selecionado == -1)
     return;
 
+  activateNote = true;
   if (selecionado == 4) {
     if (idMusica >= 0 && musicas[idMusica].isPlaying())
       musicas[idMusica].stop();

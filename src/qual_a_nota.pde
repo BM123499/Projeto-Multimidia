@@ -92,11 +92,13 @@ boolean overButton(int x, int y)  {
 
 void drawCorrect() {
     textSize(48);
+    activateNote = true;
     text("MUITO BEM!", 250, 570);
 }
 
 void drawError() {
     textSize(48);
+    activateNote = true;
     text("OOPS!", 300, 570);
 }
 

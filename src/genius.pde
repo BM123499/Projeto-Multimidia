@@ -13,8 +13,6 @@ SoundFile errorSound;
 // design
 PImage note_img, genius_bg;
 
-int mX, mY;
-
 // automatic
 int errorTime    = 2000;
 int waitingTime  =  200;
@@ -76,10 +74,8 @@ void genius_draw() {
   }
 
   else if (posclick) {
-    fill(color(255, 255, 255, 150 + min((100 * passedTime)/posclickTime, 100 - (100 * passedTime)/posclickTime) ));
+    fill(color(255, 255, 255, 150 + min((100 * passedTime)/posclickTime, 100 - (100 * passedTime)/posclickTime)));
     rect(50 + 100 * selectedTile, 110 + 30 * selectedTile, 60, 600 - 60 * selectedTile, 25);
-    
-    image(note_img, mX + passedTime/15, mY - pow(passedTime, 2)/1500, 32, 64 ); 
     
     if (passedTime > posclickTime) {
       timeStep = millis();
@@ -145,8 +141,7 @@ void genius_mouseClicked(){
       SF[sequence[sequenceId]].play();
       selectedTile = mousePlace;
       posclick = true;
-      mX = mouseX;
-      mY = mouseY;
+      activateNote = true;
 
       if (++sequenceId >= sequence.length) {
         sequenceId = -1;
