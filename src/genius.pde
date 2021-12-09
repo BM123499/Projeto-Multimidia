@@ -11,7 +11,7 @@ SoundFile[] SF;
 SoundFile errorSound;
 
 // design
-PImage note_img;
+PImage note_img, genius_bg;
 
 int mX, mY;
 
@@ -36,7 +36,7 @@ PImage cursor;
 
 void genius_setup() {
   cursor = loadImage("../Images/Test.PNG");
-
+  genius_bg = loadImage("../Images/Sequencias.png");
   note_img = loadImage("../Images/note.png");
 
   errorSound = new SoundFile(this, "../Sounds/error.mp3");
@@ -45,43 +45,48 @@ void genius_setup() {
 }
 
 void genius_draw() {
-  background(200);
+  background(genius_bg);
   strokeWeight(3);
   cursor(cursor, 0, 0);
 
   fill(165, 109, 39);
   rotate(radians(15));
-  rect(40, 70, 478, 33, 10);  
+  rect(  75, 140, 720, 38, 25);  
   rotate(radians(-30));
-  rect(-90, 390, 478, 33, 10);
+  rect(-138, 625, 720, 38, 25);
   rotate(radians(15));
   
   for (int i = 0; i < difficult; ++i) {
     fill(error ? color(255, 0, 0) : Colors[i]);
-    rect(40 + 63 * i, 65 + 15 * i, 50, 375 - 30 * i, 10);
+    rect(50 + 100 * i, 110 + 30 * i, 60, 600 - 60 * i, 25);
 
     if (!showing && !error && !posclick && i == mousePlace){
       fill(color(255, 255, 255, 100));
-      rect(40 + 63 * i, 65 + 15 * i, 50, 375 - 30 * i, 10);
+      rect(50 + 100 * i, 110 + 30 * i, 60, 600 - 60 * i, 25);
     }
   }
   
   int passedTime = millis() - timeStep;
-  
-   if (hold) {
-    if (millis() - timeStep > holdTime)
+  println(frameRate + (hold ? "YES" : "NO") + (posclick ? "YES" : "NO"));
+  if (hold) {
+    if (millis() - timeStep > holdTime) {
       hold = false;
-   }
+      timeStep = millis();
+    }
+  }
 
   else if (posclick) {
     fill(color(255, 255, 255, 150 + min((100 * passedTime)/posclickTime, 100 - (100 * passedTime)/posclickTime) ));
-    rect(40 + 63 * selectedTile, 65 + 15 * selectedTile, 50, 375 - 30 * selectedTile, 10);
+    rect(50 + 100 * selectedTile, 110 + 30 * selectedTile, 60, 600 - 60 * selectedTile, 25);
     
-    image(note_img, mX + passedTime/15, mY - pow(passedTime, 1.9)/1500, 32, 64 ); 
+    image(note_img, mX + passedTime/15, mY - pow(passedTime, 2)/1500, 32, 64 ); 
     
     if (passedTime > posclickTime) {
       timeStep = millis();
       posclick = false;
+      
+      if (sequenceId == -1)
+        hold = true;
     }
   }
   else if (error) {
@@ -90,9 +95,9 @@ void genius_draw() {
   }
   else if (showing && !breath) {
     fill(color(255, 255, 255, 150 + min((100 * passedTime)/blinkingTime, 100 - (100 * passedTime)/blinkingTime) ));
-    rect(40 + 63 * sequence[sequenceId], 65 + 15 * sequence[sequenceId], 50, 375 - 30 * sequence[sequenceId], 10);
+    rect(50 + 100 * sequence[sequenceId], 110 + 30 * sequence[sequenceId], 60, 600 - 60 * sequence[sequenceId], 25);
     
-    image(note_img, 65 + 63 * sequence[sequenceId] + passedTime/15, 250 - pow(passedTime, 1.9)/1500, 32, 64 );
+    image(note_img, 80 + 100 * sequence[sequenceId] + passedTime/15, 375 - pow(passedTime, 1.9)/1500, 32, 64);
 
     if (millis() - timeStep > blinkingTime) {
       timeStep = millis();
@@ -114,12 +119,11 @@ void genius_draw() {
   strokeWeight(1);
   fill(128, 128, 128);
   for (int i = 0; i < difficult; ++i) {
-    circle(65 + 63 * i, 103 + 17 * i, 8);
-    circle(65 + 63 * i, 403 - 17 * i, 8);
+    circle(80 + 100 * i, 182 + 27 * i, 10);
+    circle(80 + 100 * i, 647 - 27 * i, 10);
   }
 
   strokeWeight(1);
-  cursor(ARROW);
 }
 
 void genius_mouseClicked(){
@@ -148,7 +152,6 @@ void genius_mouseClicked(){
         sequenceId = -1;
         showing = true;
         breath = true;
-        hold = true;
         sequence = append(sequence, parseInt(random(0, difficult)));
       }
     }
@@ -161,7 +164,7 @@ void genius_mouseMoved() {
   PVector vec = new PVector(mouseX, mouseY);
   
   for (int i = 0; i < difficult; i++)
-    if (40 + 63 * i < vec.x && vec.x < 90 + 63 * i && 65 + 15 * i < vec.y && vec.y < 440 - 15 * i) {
+    if (50 + 100 * i < vec.x && vec.x < 110 + 100 * i && 110 + 30 * i < vec.y && vec.y < 710 - 30 * i) {
       mousePlace = i;
       return;
     }
@@ -170,6 +173,8 @@ void genius_mouseMoved() {
 }
 
 void genius_exit() {
+  cursor(ARROW);
+
   if (errorSound.isPlaying())
     errorSound.stop();
     

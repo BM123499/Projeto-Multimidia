@@ -13,7 +13,7 @@ int idMusica = -1;
 int resposta = -1; 
 
 void genero_setup() {
-  gen_img = loadImage("../Images/Genero.png");
+  gen_img = loadImage("../Images/Generos.png");
 
   musicas = new SoundFile[] {new SoundFile(this, "../Sounds/sample.aiff")};
   generos = new String[] {"POP"};
