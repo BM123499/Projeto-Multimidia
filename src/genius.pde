@@ -67,7 +67,7 @@ void genius_draw() {
   }
   
   int passedTime = millis() - timeStep;
-  println(frameRate + (hold ? "YES" : "NO") + (posclick ? "YES" : "NO"));
+
   if (hold) {
     if (millis() - timeStep > holdTime) {
       hold = false;
