@@ -15,48 +15,31 @@ void tela_setup() {
 
 void tela_draw() {
   background(tela_bg);
-  
-  if(genButtonOver){
-    fill(#b25726);
-  } else {
-    fill(#FF7D37);
-  }
+
+  fill(genButtonOver ? #FFBD67 : #FF7D37);
   rect(rectX, rectY, rectSize + 180, rectSize - 90, 25);
   
   textSize(30);
   fill(0, 0, 0);
   text("Gêneros", rectX + 100, rectY + 35);
-  
-  if(seqButtonOver){
-    fill(#b20079);
-  } else {
-    fill(#FF00AE);
-  }
+
+  fill(seqButtonOver ? #FF40EE : #FF00AE);
   rect(rectX, rectY + gapRectY, rectSize + 180, rectSize - 90, 25);
-  
+
   fill(0, 0, 0);
   text("Sequências", rectX + 80, rectY + gapRectY + 35);
-  
-  if(notasButtonOver){
-    fill(#b2953e);
-  } else {
-    fill(#FFD659);
-  }
+
+  fill(notasButtonOver ? #FFFF99 : #FFD659);
   rect(rectX, rectY + gapRectY*2, rectSize + 180, rectSize - 90, 25);
-  
+
   fill(0, 0, 0);
   text("Notas", rectX + 120, rectY + gapRectY*2 + 35);
-  
-  if(insButtonOver){
-    fill(#008076);
-  } else {
-    fill(#00B8A9);
-  }
+
+  fill(insButtonOver ? #40F8E9 : #00B8A9);
   rect(rectX, rectY + gapRectY*3, rectSize + 180, rectSize - 90, 25);
-  
+
   fill(0, 0, 0);
   text("Instrumentos", rectX + 70, rectY + gapRectY*3 + 35);
-  
 }
 
 void tela_mouseMoved(){
