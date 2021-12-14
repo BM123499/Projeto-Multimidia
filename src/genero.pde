@@ -157,7 +157,4 @@ void genero_mouseMoved() {
 void genero_exit() {
   if (idMusica >= 0 && musicas[idMusica].isPlaying())
     musicas[idMusica].stop();
-
-  idMusica = -1;
-  resposta = -1; 
 }
