@@ -134,6 +134,7 @@ void genius_mouseClicked(){
     breath = true;
     sequenceId = -1;
     timeStep = millis();
+    actualScore[3] = 0;
   }
   else if (!showing && 0 <= mousePlace && mousePlace < difficult) {
     if (sequence.length == 0 || sequence[sequenceId] != mousePlace) {
