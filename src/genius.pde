@@ -24,10 +24,10 @@ int timeStep     = 0;
 int mousePlace   = -1;
 int selectedTile = 0;
 
-boolean error   = false;
-boolean showing = false;
-boolean breath  = false;
-boolean posclick   = false;
+boolean error    = false;
+boolean showing  = false;
+boolean breath   = false;
+boolean posclick = false;
 
 boolean hold = false;
 PImage cursor;
@@ -183,7 +183,9 @@ void genius_exit() {
   for (int i = 0; i < SF.length; ++i)
     if (SF[i].isPlaying())
       SF[i].stop();
-      
+
   sequenceId = 0;
+  actualScore[3] = 0;
   sequence = new int[] {};
+  showing = error = breath = posclick = false;
 }
