@@ -118,7 +118,11 @@ void genius_draw() {
     circle(80 + 100 * i, 182 + 27 * i, 10);
     circle(80 + 100 * i, 647 - 27 * i, 10);
   }
-
+  
+  fill(0);
+  textSize(30);
+  text("Maior Pontuação: " + str(HScore[3]), 425, 730);
+  text("Pontuação Atual: " + str(actualScore[3]), 50, 730);
   strokeWeight(1);
 }
 
@@ -136,6 +140,7 @@ void genius_mouseClicked(){
       errorSound.play();
       error = true;
       sequence = new int[]{};
+      actualScore[3] = 0;
     }
     else {
       SF[sequence[sequenceId]].play();
@@ -147,6 +152,7 @@ void genius_mouseClicked(){
         sequenceId = -1;
         showing = true;
         breath = true;
+        HScore[3] = max(++actualScore[3], HScore[3]);
         sequence = append(sequence, parseInt(random(0, difficult)));
       }
     }

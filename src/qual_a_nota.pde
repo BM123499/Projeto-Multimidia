@@ -16,6 +16,7 @@ int CHOSEN_NOTE_INDEX = -1;
 
 int LARGURA_BOTAO = 147;
 int ALTURA_BOTAO = 64;
+int notaOver = -1;
 
 color[] CORES_BOTOES = {#00B8A9, #FF00AE, #FF7D37, #FFD659}; 
 int[] X_INICIAL_BOTOES = {37, 214, 214 + 177, 214 + 177*2, 125, 125 + 177, 125 + 177 * 2 };
@@ -37,7 +38,9 @@ void onAnswer(String note) {
   if (CHOSEN_NOTE.equals(note)) {
     CURRENT_STATE = STATE_CORRECT;
     NOTES_SOUNDS[CHOSEN_NOTE_INDEX].play();
+    HScore[0] = max(++actualScore[0], HScore[0]);
   } else {
+    actualScore[0] = 0;
     CURRENT_STATE = STATE_ERROR; 
     ERROR_SOUND.play();
   }
@@ -64,6 +67,12 @@ void drawWaitingForAnswer() {
   for(int i = 0; i < NOTES.length; i++) {
     fill(CORES_BOTOES[i % CORES_BOTOES.length]);
     rect(X_INICIAL_BOTOES[i], Y_INICIAL_BOTOES[i], LARGURA_BOTAO, ALTURA_BOTAO);
+
+    if (i == notaOver) {
+      fill(255, 140);
+      rect(X_INICIAL_BOTOES[i], Y_INICIAL_BOTOES[i], LARGURA_BOTAO, ALTURA_BOTAO);
+    }
+
     fill(0);
     textSize(48);
     text(NOTES[i], X_INICIAL_BOTOES[i] + 40, Y_INICIAL_BOTOES[i] + 55);
@@ -71,19 +80,23 @@ void drawWaitingForAnswer() {
 }
 
 void nota_mouseClicked() {
-  if(isTerminalState()) {
+  if(isTerminalState())
     cleanUp();
-  }
-  if(CURRENT_STATE != STATE_WAITING_FOR_ANSWER) {
+
+  if(CURRENT_STATE != STATE_WAITING_FOR_ANSWER)
     return;
-  }
   
   // Clicar no botão de resposta
-  for(int i = 0; i < NOTES.length; i++) {
-    if(overButton(X_INICIAL_BOTOES[i], Y_INICIAL_BOTOES[i])) {
+  for(int i = 0; i < NOTES.length; i++)
+    if(overButton(X_INICIAL_BOTOES[i], Y_INICIAL_BOTOES[i]))
       onAnswer(NOTES[i]);
-    }
-  }
+}
+
+void nota_mouseMoved() {
+  notaOver = -1;
+  for(int i = 0; i < NOTES.length; i++)
+    if(overButton(X_INICIAL_BOTOES[i], Y_INICIAL_BOTOES[i]))
+      notaOver = i;
 }
 
 boolean overButton(int x, int y)  {
@@ -109,15 +122,19 @@ boolean isTerminalState() {
 void nota_draw() {
   drawBackground();
   
-  if (CURRENT_STATE == STATE_INITIAL) {
+  if (CURRENT_STATE == STATE_INITIAL)
     initialize(); 
-  } else if (CURRENT_STATE == STATE_WAITING_FOR_ANSWER) {
+  else if (CURRENT_STATE == STATE_WAITING_FOR_ANSWER)
     drawWaitingForAnswer();
-  } else if (CURRENT_STATE == STATE_CORRECT) {
+  else if (CURRENT_STATE == STATE_CORRECT)
     drawCorrect();
-  } else if (CURRENT_STATE == STATE_ERROR) {
+  else if (CURRENT_STATE == STATE_ERROR)
     drawError();
-  }
+  
+  fill(0);
+  textSize(30);
+  text("Maior Pontuação: " + str(HScore[0]), 425, 730);
+  text("Pontuação Atual: " + str(actualScore[0]), 50, 730);
 }
 
 void nota_exit() {

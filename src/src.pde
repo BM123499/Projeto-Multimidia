@@ -5,6 +5,7 @@ int noteDuration = 500;
 int noteStart = -noteDuration - 1;
 boolean activateNote = false;
 int mX, mY;
+int[] HScore = new int[] {0, 0, 0, 0}, actualScore = new int[] {0, 0, 0, 0};
 
 void setup() {
   size(750, 750);
@@ -78,9 +79,12 @@ void mouseClicked() {
 void mouseMoved() {
   if (screen == 0)
     tela_mouseMoved();
-  else if (screen == 1);
-  else if (screen == 2);
-  else if (screen == 3);
+  else if (screen == 1)
+    nota_mouseMoved();
+  else if (screen == 2)
+    instrumentos_mouseMoved();
+  else if (screen == 3)
+    genero_mouseMoved();
   else if (screen == 4)
     genius_mouseMoved();
   else
