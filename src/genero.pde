@@ -6,8 +6,8 @@ PImage gen_img;
 SoundFile[] musicas;
 String[] generos;
 
-String[] todasOpcoes = {"Funk", "Rock", "POP", "KPOP", "Folk", "Forró", "MPB", "Rap"};
-String[] opcoes = new String[] {"Opcao1", "Opcao2", "Opcao3", "Opcao4"};
+String[] todasOpcoes = {"Classical", "Jazz", "POP", "Rock"};
+String[] opcoes = new String[] {"Classical", "Jazz", "POP", "Rock"};
 
 int idMusica = -1;
 int resposta = -1;
@@ -16,8 +16,13 @@ int genOver  = -1;
 void genero_setup() {
   gen_img = loadImage("../Images/Generos.png");
 
-  musicas = new SoundFile[] {new SoundFile(this, "../Sounds/sample.aiff")};
-  generos = new String[] {"POP"};
+  musicas = new SoundFile[] {new SoundFile(this, "../Sounds/classical.wav"), new SoundFile(this, "../Sounds/jazz.wav"), new SoundFile(this, "../Sounds/pop.wav"), new SoundFile(this, "../Sounds/rock.wav")};
+  generos = new String[] {"Classical", "Jazz", "POP", "Rock"};
+  
+  resposta = parseInt(0);
+  idMusica = parseInt(0);
+  gen_waveform = new Waveform(this, 100);
+  gen_waveform.input(musicas[idMusica]);
 }
 
 void genero_draw() {
@@ -102,7 +107,12 @@ void genero_mouseClicked() {
 
   if (idMusica >= 0 && musicas[idMusica].isPlaying())
     musicas[idMusica].stop();
-    
+  
+  if (selecionado == 4) {
+    musicas[idMusica].play();
+    return;
+  }
+  
   resposta = parseInt(random(4));
   idMusica = parseInt(random(generos.length));    
   opcoes[resposta] = generos[idMusica];
