@@ -9,6 +9,7 @@ String[] generos;
 String[] todasOpcoes = {"Classical", "Jazz", "POP", "Rock"};
 String[] opcoes = new String[] {"Classical", "Jazz", "POP", "Rock"};
 
+
 int idMusica = -1;
 int resposta = -1;
 int genOver  = -1;
@@ -97,10 +98,35 @@ void genero_mouseClicked() {
 
   activateNote = true;
   if (0 <= resposta && resposta < 4 && selecionado != 4) {
-    if (resposta == selecionado)
+    if (resposta == selecionado) {
+      if (musicas[idMusica].isPlaying())
+        musicas[idMusica].stop();
+
       HScore[2] = max(++actualScore[2], HScore[2]);
-    else
+      resposta = parseInt(random(4));
+      idMusica = parseInt(random(generos.length));    
+      opcoes[resposta] = generos[idMusica];
+      somVitoria.play();
+    
+      for (int i = 0; i < 4; ++i) {
+        if (i == resposta)
+          continue;
+    
+        Boolean b = true;
+        while(b) {
+          opcoes[i] = todasOpcoes[parseInt(random(todasOpcoes.length))];
+    
+          b = opcoes[i].equals(generos[idMusica]);
+          for (int j = 0; j < i; ++j)
+            if (opcoes[i].equals(opcoes[j]))
+              b = true;
+        }
+      }
+    }
+    else {
       actualScore[2] = 0;
+      errorSound.play();
+    }
 
     musicas[idMusica].stop();
   }
@@ -109,32 +135,10 @@ void genero_mouseClicked() {
     musicas[idMusica].stop();
   
   if (selecionado == 4) {
+    gen_waveform = new Waveform(this, 100);
+    gen_waveform.input(musicas[idMusica]);
     musicas[idMusica].play();
-    return;
   }
-  
-  resposta = parseInt(random(4));
-  idMusica = parseInt(random(generos.length));    
-  opcoes[resposta] = generos[idMusica];
-
-  for (int i = 0; i < 4; ++i) {
-    if (i == resposta)
-      continue;
-
-    Boolean b = true;
-    while(b) {
-      opcoes[i] = todasOpcoes[parseInt(random(todasOpcoes.length))];
-
-      b = opcoes[i].equals(generos[idMusica]);
-      for (int j = 0; j < i; ++j)
-        if (opcoes[i].equals(opcoes[j]))
-          b = true;
-    }
-  }
-  
-  gen_waveform = new Waveform(this, 100);
-  gen_waveform.input(musicas[idMusica]);
-  musicas[idMusica].play();
 }
 
 void genero_mouseMoved() {
